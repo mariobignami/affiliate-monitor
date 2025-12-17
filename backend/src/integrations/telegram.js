@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const logger = require('../utils/logger');
 
 let botInstance = null;
+let currentToken = null;
 
 /**
  * Get or create Telegram bot instance
@@ -11,8 +12,9 @@ const getBot = (token) => {
     throw new Error('Telegram bot token is required');
   }
 
-  if (!botInstance || botInstance.token !== token) {
+  if (!botInstance || currentToken !== token) {
     botInstance = new TelegramBot(token, { polling: false });
+    currentToken = token;
   }
 
   return botInstance;

@@ -15,7 +15,10 @@ mkdir -p ${BACKUP_DIR}
 
 # Backup PostgreSQL database
 echo "📦 Backing up database..."
-docker-compose exec -T postgres pg_dump -U ${DB_USER:-postgres} ${DB_NAME:-affiliate_monitor} > ${BACKUP_DIR}/${BACKUP_FILE}
+if ! docker-compose exec -T postgres pg_dump -U ${DB_USER:-postgres} ${DB_NAME:-affiliate_monitor} > ${BACKUP_DIR}/${BACKUP_FILE} 2>/dev/null; then
+  echo "❌ Backup failed. Make sure the database is running."
+  exit 1
+fi
 
 # Compress backup
 echo "🗜️  Compressing backup..."

@@ -4,6 +4,10 @@ export const authService = {
   register: async (data) => {
     const response = await api.post('/auth/register', data);
     if (response.data?.token) {
+      // Note: localStorage is used for simplicity. In production, consider:
+      // 1. Using httpOnly cookies for better XSS protection
+      // 2. Implementing token refresh mechanism
+      // 3. Adding token encryption
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
     }
